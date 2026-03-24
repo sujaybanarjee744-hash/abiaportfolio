@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abia Ansari — Psychology Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --lavender: #c5b8e8;
+  --lavender-light: #e8e2f7;
+  --lavender-deep: #9b87c9;
+  --pastel-blue: #b8d4e8;
+  --sky: #d6eaf4;
+  --beige: #f5ede0;
+  --warm-white: #fdfaf6;
+  --cream: #f8f3ec;
+  --blush: #f0d9d5;
+  --sage: #c8dcc8;
+  --text-dark: #2a2035;
+  --text-mid: #5a4f6a;
+  --text-light: #9a8faa;
+  --glass-bg: rgba(255,255,255,0.55);
+  --glass-border: rgba(255,255,255,0.7);
+  --shadow-soft: 0 8px 32px rgba(155,135,201,0.15);
+  --shadow-deep: 0 20px 60px rgba(155,135,201,0.25);
+  --radius: 24px;
+  --radius-sm: 14px;
+}
+[data-theme="dark"] {
+  --lavender: #9b87c9;
+  --lavender-light: #3a2f55;
+  --lavender-deep: #c5b8e8;
+  --pastel-blue: #2a3d52;
+  --sky: #1e2d3d;
+  --beige: #1e1a14;
+  --warm-white: #12100f;
+  --cream: #1a1614;
+  --blush: #2a1f1e;
+  --text-dark: #f0eaf8;
+  --text-mid: #c5b8e8;
+  --text-light: #8a7f9a;
+  --glass-bg: rgba(30,20,50,0.6);
+  --glass-border: rgba(197,184,232,0.15);
+  --shadow-soft: 0 8px 32px rgba(0,0,0,0.4);
+  --shadow-deep: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+html{scroll-behavior:smooth;font-size:16px;}
+
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--warm-white);
+  color:var(--text-dark);
+  overflow-x:hidden;
+  cursor:none;
+  transition:background 0.5s, color 0.5s;
+}
+
+/* ── CUSTOM CURSOR ── */
+#cursor{
+  position:fixed;width:12px;height:12px;
+  background:var(--lavender-deep);
+  border-radius:50%;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:transform 0.08s, width 0.2s, height 0.2s, opacity 0.2s;
+  mix-blend-mode:multiply;
+}
+#cursor-ring{
+  position:fixed;width:40px;height:40px;
+  border:1.5px solid var(--lavender-deep);
+  border-radius:50%;
+  pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:transform 0.18s ease, width 0.3s, height 0.3s, opacity 0.3s;
+  opacity:0.5;
+}
+body:has(a:hover) #cursor, body:has(button:hover) #cursor{width:20px;height:20px;opacity:0.6;}
+
+/* ── LOADING SCREEN ── */
+#loader{
+  position:fixed;inset:0;z-index:10000;
+  background:var(--warm-white);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity 0.8s ease, visibility 0.8s;
+}
+#loader.hidden{opacity:0;visibility:hidden;}
+.loader-brain{
+  width:80px;height:80px;position:relative;margin-bottom:24px;
+}
+.neural-ring{
+  position:absolute;inset:0;
+  border-radius:50%;
+  border:2px solid transparent;
+  border-top-color:var(--lavender-deep);
+  animation:spin 1.2s linear infinite;
+}
+.neural-ring:nth-child(2){
+  inset:10px;
+  border-top-color:var(--pastel-blue);
+  animation-duration:0.9s;animation-direction:reverse;
+}
+.neural-ring:nth-child(3){
+  inset:20px;
+  border-top-color:var(--blush);
+  animation-duration:1.6s;
+}
+.loader-text{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.1rem;letter-spacing:0.3em;
+  color:var(--text-mid);opacity:0.7;
+  text-transform:uppercase;
+}
+.loader-progress{
+  margin-top:20px;width:160px;height:2px;
+  background:var(--lavender-light);
+  border-radius:2px;overflow:hidden;
+}
+.loader-fill{
+  height:100%;width:0%;
+  background:linear-gradient(90deg,var(--lavender-deep),var(--pastel-blue));
+  border-radius:2px;
+  animation:fill 2.2s ease-out forwards;
+}
+@keyframes fill{to{width:100%;}}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── CANVAS BG ── */
+#bg-canvas{
+  position:fixed;inset:0;z-index:0;
+  pointer-events:none;opacity:0.6;
+}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  padding:0 5vw;height:72px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(253,250,246,0.7);
+  backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--glass-border);
+  transition:background 0.5s;
+}
+[data-theme="dark"] nav{background:rgba(18,16,15,0.7);}
+.nav-logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.5rem;font-weight:600;
+  letter-spacing:0.05em;
+  color:var(--text-dark);
+  text-decoration:none;
+}
+.nav-logo span{color:var(--lavender-deep);}
+.nav-links{display:flex;gap:2.5rem;list-style:none;}
+.nav-links a{
+  font-size:0.85rem;letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--text-mid);text-decoration:none;
+  transition:color 0.3s;font-weight:500;
+}
+.nav-links a:hover{color:var(--lavender-deep);}
+.nav-actions{display:flex;align-items:center;gap:1rem;}
+#theme-toggle{
+  width:44px;height:24px;
+  background:var(--lavender-light);
+  border-radius:12px;border:none;cursor:pointer;
+  position:relative;transition:background 0.3s;
+}
+#theme-toggle::after{
+  content:'';position:absolute;
+  top:3px;left:3px;
+  width:18px;height:18px;
+  background:var(--lavender-deep);
+  border-radius:50%;
+  transition:transform 0.3s;
+}
+[data-theme="dark"] #theme-toggle::after{transform:translateX(20px);}
+
+/* ── SECTIONS ── */
+section{position:relative;z-index:1;}
+
+/* ── HERO ── */
+#hero{
+  min-height:100vh;
+  display:flex;align-items:center;
+  padding:100px 10vw 60px;
+  gap:6vw;
+  overflow:hidden;
+}
+.hero-content{flex:1;min-width:0;}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 16px;
+  background:var(--lavender-light);
+  border-radius:100px;
+  font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--lavender-deep);font-weight:500;
+  margin-bottom:2rem;
+  opacity:0;animation:fadeUp 0.8s 2.5s ease forwards;
+}
+.hero-tag::before{
+  content:'';width:6px;height:6px;
+  background:var(--lavender-deep);
+  border-radius:50%;
+}
+.hero-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(3.5rem,6vw,7rem);
+  font-weight:300;line-height:1.05;
+  letter-spacing:-0.02em;
+  opacity:0;animation:fadeUp 0.9s 2.7s ease forwards;
+}
+.hero-name em{
+  font-style:italic;color:var(--lavender-deep);
+}
+.hero-title{
+  font-size:1rem;letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--text-light);font-weight:400;
+  margin:1.2rem 0 1.5rem;
+  opacity:0;animation:fadeUp 0.8s 2.9s ease forwards;
+}
+.hero-tagline{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.2rem,2vw,1.6rem);
+  font-style:italic;
+  color:var(--text-mid);
+  line-height:1.6;max-width:480px;
+  opacity:0;animation:fadeUp 0.8s 3.1s ease forwards;
+}
+.hero-cta{
+  display:flex;gap:1rem;flex-wrap:wrap;
+  margin-top:2.5rem;
+  opacity:0;animation:fadeUp 0.8s 3.3s ease forwards;
+}
+.btn-primary{
+  padding:14px 32px;
+  background:var(--lavender-deep);
+  color:#fff;border:none;border-radius:100px;
+  font-family:'DM Sans',sans-serif;
+  font-size:0.9rem;font-weight:500;
+  letter-spacing:0.05em;cursor:pointer;
+  transition:all 0.3s;
+  box-shadow:0 4px 20px rgba(155,135,201,0.4);
+  text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+}
+.btn-primary:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 30px rgba(155,135,201,0.5);
+}
+.btn-secondary{
+  padding:14px 32px;
+  background:transparent;
+  color:var(--text-dark);
+  border:1.5px solid var(--lavender-deep);
+  border-radius:100px;
+  font-family:'DM Sans',sans-serif;
+  font-size:0.9rem;font-weight:500;
+  letter-spacing:0.05em;cursor:pointer;
+  transition:all 0.3s;
+  text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+}
+.btn-secondary:hover{
+  background:var(--lavender-light);
+  transform:translateY(-3px);
+}
+
+/* ── HERO PHOTO ── */
+.hero-visual{
+  flex:0 0 auto;
+  width:min(420px,40vw);
+  opacity:0;animation:fadeLeft 1s 2.8s ease forwards;
+}
+.photo-frame{
+  position:relative;
+  border-radius:40% 60% 70% 30% / 40% 50% 60% 50%;
+  overflow:hidden;
+  aspect-ratio:3/4;
+  box-shadow:var(--shadow-deep);
+  animation:morphBorder 8s ease-in-out infinite;
+  transition:box-shadow 0.5s;
+}
+.photo-frame img{
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:top center;
+  filter:saturate(1.1) brightness(1.02);
+  transition:transform 0.6s ease;
+}
+.photo-frame:hover img{transform:scale(1.04);}
+@keyframes morphBorder{
+  0%,100%{border-radius:40% 60% 70% 30% / 40% 50% 60% 50%;}
+  33%{border-radius:60% 40% 30% 70% / 60% 30% 70% 40%;}
+  66%{border-radius:30% 70% 60% 40% / 50% 60% 30% 60%;}
+}
+.photo-orbit{
+  position:absolute;inset:-20px;
+  border-radius:inherit;
+  border:1px dashed rgba(155,135,201,0.3);
+  animation:spin 20s linear infinite;
+  pointer-events:none;
+}
+.photo-badge{
+  position:absolute;bottom:20px;left:-20px;
+  background:var(--glass-bg);
+  backdrop-filter:blur(16px);
+  border:1px solid var(--glass-border);
+  border-radius:16px;
+  padding:12px 16px;
+  box-shadow:var(--shadow-soft);
+  display:flex;align-items:center;gap:10px;
+  white-space:nowrap;
+  animation:float 3s ease-in-out infinite;
+}
+.photo-badge2{
+  position:absolute;top:30px;right:-20px;
+  background:var(--glass-bg);
+  backdrop-filter:blur(16px);
+  border:1px solid var(--glass-border);
+  border-radius:16px;
+  padding:12px 16px;
+  box-shadow:var(--shadow-soft);
+  display:flex;align-items:center;gap:10px;
+  white-space:nowrap;
+  animation:float 3.5s 0.5s ease-in-out infinite;
+}
+.badge-icon{font-size:1.2rem;}
+.badge-text{font-size:0.75rem;color:var(--text-mid);font-weight:500;}
+.badge-text strong{display:block;color:var(--text-dark);font-size:0.85rem;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+
+/* ── SCROLL INDICATOR ── */
+.scroll-hint{
+  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--text-light);
+  opacity:0;animation:fadeUp 0.8s 3.5s ease forwards;
+}
+.scroll-line{
+  width:1px;height:50px;
+  background:linear-gradient(to bottom,var(--lavender-deep),transparent);
+  animation:scrollLine 1.5s ease-in-out infinite;
+}
+@keyframes scrollLine{0%{transform:scaleY(0);transform-origin:top;}50%{transform:scaleY(1);transform-origin:top;}51%{transform:scaleY(1);transform-origin:bottom;}100%{transform:scaleY(0);transform-origin:bottom;}}
+
+/* ── ABOUT ── */
+#about{
+  padding:120px 10vw;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6vw;align-items:center;
+}
+.section-label{
+  font-size:0.72rem;letter-spacing:0.25em;text-transform:uppercase;
+  color:var(--lavender-deep);font-weight:500;
+  margin-bottom:1rem;
+  opacity:0;transform:translateY(20px);
+  transition:opacity 0.8s,transform 0.8s;
+}
+.section-label.visible{opacity:1;transform:none;}
+.section-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.5rem,4vw,4rem);
+  font-weight:300;line-height:1.1;
+  opacity:0;transform:translateY(20px);
+  transition:opacity 0.8s 0.1s,transform 0.8s 0.1s;
+}
+.section-title.visible{opacity:1;transform:none;}
+.section-title em{font-style:italic;color:var(--lavender-deep);}
+
+.about-text{
+  font-size:1.05rem;line-height:1.85;
+  color:var(--text-mid);
+  margin-top:1.5rem;
+  opacity:0;transform:translateY(20px);
+  transition:opacity 0.8s 0.2s,transform 0.8s 0.2s;
+}
+.about-text.visible{opacity:1;transform:none;}
+
+.about-cards{
+  display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;
+}
+.a-card{
+  background:var(--glass-bg);
+  backdrop-filter:blur(20px);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius);
+  padding:1.8rem 1.5rem;
+  box-shadow:var(--shadow-soft);
+  transition:transform 0.3s,box-shadow 0.3s;
+  opacity:0;transform:translateY(30px) scale(0.96);
+  cursor:default;
+}
+.a-card.visible{opacity:1;transform:none;}
+.a-card:hover{transform:translateY(-6px) rotateX(2deg);box-shadow:var(--shadow-deep);}
+.a-card-icon{font-size:2rem;margin-bottom:0.8rem;}
+.a-card-title{font-weight:600;font-size:0.95rem;margin-bottom:0.4rem;}
+.a-card-desc{font-size:0.82rem;color:var(--text-light);line-height:1.6;}
+
+/* ── EDUCATION ── */
+#education{
+  padding:120px 10vw;
+  background:linear-gradient(135deg,var(--lavender-light) 0%,var(--sky) 50%,var(--cream) 100%);
+}
+[data-theme="dark"] #education{background:linear-gradient(135deg,rgba(58,47,85,0.5),rgba(42,61,82,0.5),rgba(26,22,20,0.5));}
+
+.edu-inner{max-width:700px;margin:0 auto;}
+.timeline{margin-top:3.5rem;position:relative;}
+.timeline::before{
+  content:'';position:absolute;left:28px;top:0;bottom:0;
+  width:1px;background:linear-gradient(to bottom,var(--lavender-deep),transparent);
+}
+.tl-item{
+  display:flex;gap:2rem;margin-bottom:2.5rem;
+  opacity:0;transform:translateX(-20px);
+  transition:opacity 0.7s,transform 0.7s;
+}
+.tl-item.visible{opacity:1;transform:none;}
+.tl-dot{
+  flex:0 0 58px;height:58px;
+  background:var(--glass-bg);
+  backdrop-filter:blur(16px);
+  border:1.5px solid var(--glass-border);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;
+  box-shadow:var(--shadow-soft);
+  position:relative;z-index:1;
+}
+.tl-content{
+  background:var(--glass-bg);
+  backdrop-filter:blur(16px);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius-sm);
+  padding:1.2rem 1.5rem;
+  box-shadow:var(--shadow-soft);
+  flex:1;
+  transition:transform 0.3s;
+}
+.tl-content:hover{transform:translateX(4px);}
+.tl-year{font-size:0.75rem;letter-spacing:0.1em;color:var(--lavender-deep);font-weight:500;margin-bottom:0.3rem;}
+.tl-inst{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;}
+.tl-degree{font-size:0.85rem;color:var(--text-mid);margin-top:0.2rem;}
+.tl-grade{
+  display:inline-block;margin-top:0.5rem;
+  padding:3px 10px;
+  background:var(--lavender-light);
+  border-radius:100px;
+  font-size:0.75rem;font-weight:500;color:var(--lavender-deep);
+}
+
+/* ── SKILLS ── */
+#skills{padding:120px 10vw;}
+.skills-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:1.5rem;
+  margin-top:3.5rem;
+}
+.skill-card{
+  background:var(--glass-bg);
+  backdrop-filter:blur(20px);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius);
+  padding:2rem;
+  box-shadow:var(--shadow-soft);
+  opacity:0;transform:translateY(20px);
+  transition:opacity 0.7s,transform 0.7s,box-shadow 0.3s;
+}
+.skill-card.visible{opacity:1;transform:none;}
+.skill-card:hover{box-shadow:var(--shadow-deep);transform:translateY(-4px);}
+.skill-name{font-weight:500;font-size:0.95rem;margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;}
+.skill-pct{color:var(--lavender-deep);font-size:0.85rem;}
+.skill-bar{
+  height:6px;background:var(--lavender-light);
+  border-radius:3px;overflow:hidden;
+}
+.skill-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--lavender-deep),var(--pastel-blue));
+  border-radius:3px;
+  width:0%;
+  transition:width 1.2s cubic-bezier(0.4,0,0.2,1);
+}
+
+.lang-chips{
+  display:flex;flex-wrap:wrap;gap:0.7rem;margin-top:3rem;
+}
+.lang-chip{
+  padding:8px 20px;
+  background:var(--glass-bg);
+  backdrop-filter:blur(12px);
+  border:1px solid var(--glass-border);
+  border-radius:100px;
+  font-size:0.85rem;font-weight:500;
+  color:var(--text-mid);
+  box-shadow:var(--shadow-soft);
+  transition:all 0.3s;
+}
+.lang-chip:hover{background:var(--lavender-light);color:var(--lavender-deep);transform:translateY(-2px);}
+
+/* ── EXPERIENCE ── */
+#experience{
+  padding:120px 10vw;
+  background:linear-gradient(135deg,var(--cream) 0%,var(--blush) 60%,var(--lavender-light) 100%);
+}
+[data-theme="dark"] #experience{background:linear-gradient(135deg,rgba(26,22,20,0.8),rgba(42,31,30,0.8),rgba(58,47,85,0.5));}
+.exp-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:1.5rem;margin-top:3.5rem;
+}
+.exp-card{
+  background:var(--glass-bg);
+  backdrop-filter:blur(20px);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius);
+  padding:2rem;
+  box-shadow:var(--shadow-soft);
+  transition:all 0.3s;
+  opacity:0;transform:translateY(30px);
+}
+.exp-card.visible{opacity:1;transform:none;}
+.exp-card:hover{transform:translateY(-8px) rotateY(-2deg);box-shadow:var(--shadow-deep);}
+.exp-year{
+  font-size:0.72rem;letter-spacing:0.15em;
+  color:var(--lavender-deep);font-weight:500;
+  margin-bottom:0.8rem;
+}
+.exp-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;}
+.exp-org{font-size:0.85rem;color:var(--text-mid);margin-top:0.3rem;}
+.exp-desc{font-size:0.82rem;color:var(--text-light);margin-top:0.8rem;line-height:1.6;}
+.exp-tag{
+  display:inline-block;margin-top:1rem;
+  padding:4px 12px;
+  background:linear-gradient(135deg,var(--lavender-deep),var(--pastel-blue));
+  color:#fff;border-radius:100px;
+  font-size:0.72rem;font-weight:500;letter-spacing:0.05em;
+}
+
+/* ── PROJECTS ── */
+#projects{padding:120px 10vw;}
+.projects-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:2rem;margin-top:3.5rem;
+}
+.proj-card{
+  background:var(--glass-bg);
+  backdrop-filter:blur(20px);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:var(--shadow-soft);
+  cursor:pointer;
+  transition:all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+  opacity:0;transform:translateY(40px);
+  position:relative;
+}
+.proj-card.visible{opacity:1;transform:none;}
+.proj-card:hover{transform:translateY(-12px) scale(1.02);box-shadow:var(--shadow-deep);}
+.proj-img{
+  height:180px;
+  position:relative;
+  overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+.proj-img-1{background:linear-gradient(135deg,#c5b8e8,#b8d4e8,#d6eaf4);}
+.proj-img-2{background:linear-gradient(135deg,#f0d9d5,#e8e2f7,#c5b8e8);}
+.proj-img-3{background:linear-gradient(135deg,#c8dcc8,#d6eaf4,#b8d4e8);}
+.proj-icon-big{font-size:4rem;opacity:0.6;transition:transform 0.4s;}
+.proj-card:hover .proj-icon-big{transform:scale(1.2) rotate(5deg);}
+.proj-body{padding:1.5rem;}
+.proj-num{font-size:0.72rem;letter-spacing:0.2em;color:var(--lavender-deep);font-weight:500;}
+.proj-name{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;margin:0.4rem 0;}
+.proj-desc{font-size:0.82rem;color:var(--text-light);line-height:1.6;}
+.proj-arrow{
+  position:absolute;bottom:1.5rem;right:1.5rem;
+  width:36px;height:36px;
+  background:var(--lavender-deep);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:0.9rem;
+  transform:scale(0);transition:transform 0.3s;
+}
+.proj-card:hover .proj-arrow{transform:scale(1);}
+
+/* ── MODAL ── */
+.modal-overlay{
+  position:fixed;inset:0;z-index:2000;
+  background:rgba(42,32,53,0.6);
+  backdrop-filter:blur(12px);
+  display:flex;align-items:center;justify-content:center;
+  padding:2rem;
+  opacity:0;visibility:hidden;
+  transition:opacity 0.4s,visibility 0.4s;
+}
+.modal-overlay.open{opacity:1;visibility:visible;}
+.modal-box{
+  background:var(--warm-white);
+  border-radius:var(--radius);
+  max-width:560px;width:100%;
+  padding:3rem;
+  box-shadow:var(--shadow-deep);
+  transform:translateY(30px) scale(0.95);
+  transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+  position:relative;max-height:80vh;overflow-y:auto;
+}
+.modal-overlay.open .modal-box{transform:none;}
+.modal-close{
+  position:absolute;top:1.5rem;right:1.5rem;
+  width:36px;height:36px;border-radius:50%;
+  background:var(--lavender-light);border:none;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:1rem;color:var(--text-mid);
+  transition:background 0.2s;
+}
+.modal-close:hover{background:var(--lavender-deep);color:#fff;}
+.modal-tag{font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--lavender-deep);}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;margin:0.5rem 0 1rem;}
+.modal-text{font-size:0.9rem;color:var(--text-mid);line-height:1.8;}
+.modal-chips{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:1.5rem;}
+.modal-chip{
+  padding:4px 12px;
+  background:var(--lavender-light);
+  border-radius:100px;font-size:0.75rem;color:var(--lavender-deep);font-weight:500;
+}
+
+/* ── ACHIEVEMENTS ── */
+#achievements{
+  padding:120px 10vw;
+  background:linear-gradient(135deg,var(--lavender-light),var(--cream));
+}
+[data-theme="dark"] #achievements{background:linear-gradient(135deg,rgba(58,47,85,0.4),rgba(26,22,20,0.6));}
+.ach-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:1.2rem;margin-top:3.5rem;
+}
+.ach-card{
+  background:var(--glass-bg);
+  backdrop-filter:blur(20px);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius-sm);
+  padding:1.8rem;text-align:center;
+  box-shadow:var(--shadow-soft);
+  transition:all 0.3s;
+  opacity:0;transform:scale(0.9);
+}
+.ach-card.visible{opacity:1;transform:none;}
+.ach-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-deep);}
+.ach-icon{font-size:2.5rem;margin-bottom:0.8rem;}
+.ach-title{font-weight:600;font-size:0.9rem;margin-bottom:0.3rem;}
+.ach-desc{font-size:0.78rem;color:var(--text-light);}
+
+/* ── CONTACT ── */
+#contact{padding:120px 10vw 80px;}
+.contact-inner{
+  display:grid;grid-template-columns:1fr 1.2fr;gap:6vw;align-items:start;
+}
+.contact-info .section-title{margin-bottom:1.5rem;}
+.contact-links{display:flex;flex-direction:column;gap:1rem;margin-top:2rem;}
+.c-link{
+  display:flex;align-items:center;gap:1rem;
+  padding:1rem 1.5rem;
+  background:var(--glass-bg);
+  backdrop-filter:blur(16px);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius-sm);
+  box-shadow:var(--shadow-soft);
+  text-decoration:none;color:var(--text-dark);
+  transition:all 0.3s;
+}
+.c-link:hover{transform:translateX(6px);background:var(--lavender-light);}
+.c-link-icon{font-size:1.3rem;}
+.c-link-label{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);}
+.c-link-val{font-size:0.9rem;font-weight:500;}
+
+.contact-form{
+  background:var(--glass-bg);
+  backdrop-filter:blur(20px);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius);
+  padding:2.5rem;
+  box-shadow:var(--shadow-soft);
+}
+.form-group{margin-bottom:1.5rem;}
+.form-label{
+  font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text-light);display:block;margin-bottom:0.5rem;
+}
+.form-input{
+  width:100%;padding:12px 16px;
+  background:rgba(255,255,255,0.5);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius-sm);
+  font-family:'DM Sans',sans-serif;
+  font-size:0.95rem;color:var(--text-dark);
+  outline:none;transition:border 0.3s,box-shadow 0.3s;
+}
+.form-input:focus{
+  border-color:var(--lavender-deep);
+  box-shadow:0 0 0 3px rgba(155,135,201,0.15);
+}
+textarea.form-input{resize:vertical;min-height:120px;}
+.form-btn{
+  width:100%;padding:14px;
+  background:var(--lavender-deep);
+  color:#fff;border:none;border-radius:100px;
+  font-family:'DM Sans',sans-serif;
+  font-size:0.95rem;font-weight:500;cursor:pointer;
+  transition:all 0.3s;
+  box-shadow:0 4px 20px rgba(155,135,201,0.4);
+}
+.form-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(155,135,201,0.5);}
+
+.social-row{display:flex;gap:0.8rem;margin-top:1.5rem;}
+.soc-btn{
+  width:44px;height:44px;border-radius:50%;
+  background:var(--glass-bg);
+  backdrop-filter:blur(12px);
+  border:1px solid var(--glass-border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;text-decoration:none;
+  transition:all 0.3s;box-shadow:var(--shadow-soft);
+}
+.soc-btn:hover{background:var(--lavender-deep);transform:translateY(-4px) rotate(8deg);box-shadow:var(--shadow-deep);}
+
+/* ── FOOTER ── */
+footer{
+  text-align:center;padding:2.5rem;
+  font-size:0.78rem;color:var(--text-light);
+  border-top:1px solid var(--glass-border);
+}
+footer span{color:var(--lavender-deep);}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:none;}}
+@keyframes fadeLeft{from{opacity:0;transform:translateX(40px);}to{opacity:1;transform:none;}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  #hero{flex-direction:column-reverse;text-align:center;padding-top:120px;}
+  .hero-visual{width:min(300px,70vw);}
+  .hero-cta{justify-content:center;}
+  .hero-tagline{margin:0 auto;}
+  #about{grid-template-columns:1fr;}
+  .contact-inner{grid-template-columns:1fr;}
+}
+@media(max-width:600px){
+  nav .nav-links{display:none;}
+  .about-cards{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-brain">
+    <div class="neural-ring"></div>
+    <div class="neural-ring"></div>
+    <div class="neural-ring"></div>
+  </div>
+  <div class="loader-text">Initialising Portfolio</div>
+  <div class="loader-progress"><div class="loader-fill"></div></div>
+</div>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- CANVAS -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Abia<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button id="theme-toggle" aria-label="Toggle theme"></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-content">
+    <div class="hero-tag">✦ Psychology Portfolio</div>
+    <h1 class="hero-name">Abia <em>Ansari</em></h1>
+    <p class="hero-title">Psychology Student &nbsp;·&nbsp; Research Enthusiast</p>
+    <p class="hero-tagline">"Exploring human behaviour through research, creativity, and empathy."</p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn-primary">View Work ↗</a>
+      <a href="#contact" class="btn-secondary">Get in Touch</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="photo-frame">
+      <div class="photo-orbit"></div>
+      <img src="ashish.png" alt="Abia Ansari">
+      <div class="photo-badge">
+        <span class="badge-icon">🧠</span>
+        <div class="badge-text"><strong>Delhi University</strong>B.A.(Hons.) Psychology</div>
+      </div>
+      <div class="photo-badge2">
+        <span class="badge-icon">✨</span>
+        <div class="badge-text"><strong>2 Internships</strong>2025</div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div>
+    <div class="section-label reveal">About Me</div>
+    <h2 class="section-title reveal">A Mind <em>Curious</em><br>About Minds</h2>
+    <p class="about-text reveal">I am a motivated psychology undergraduate at Delhi University with a deep interest in research, behavioural assessment, and evidence-based practice. I believe in the transformative power of understanding human behaviour — bridging empathy with scientific rigour to make a meaningful difference in people's lives.</p>
+  </div>
+  <div class="about-cards">
+    <div class="a-card reveal" style="transition-delay:0s">
+      <div class="a-card-icon">🔬</div>
+      <div class="a-card-title">Research Focus</div>
+      <div class="a-card-desc">Quantitative & qualitative methods, behavioural analysis, and academic inquiry.</div>
+    </div>
+    <div class="a-card reveal" style="transition-delay:0.1s">
+      <div class="a-card-icon">🧩</div>
+      <div class="a-card-title">Assessment</div>
+      <div class="a-card-desc">Psychological evaluation tools, case studies, and evidence-based practice.</div>
+    </div>
+    <div class="a-card reveal" style="transition-delay:0.2s">
+      <div class="a-card-icon">🤝</div>
+      <div class="a-card-title">Teamwork</div>
+      <div class="a-card-desc">Collaborative work with NGOs, college committees, and creative teams.</div>
+    </div>
+    <div class="a-card reveal" style="transition-delay:0.3s">
+      <div class="a-card-icon">🎨</div>
+      <div class="a-card-title">Creative Design</div>
+      <div class="a-card-desc">Visual storytelling, poster art, and event planning with purpose.</div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="edu-inner">
+    <div class="section-label reveal">Academic Journey</div>
+    <h2 class="section-title reveal">Education &amp; <em>Milestones</em></h2>
+    <div class="timeline">
+      <div class="tl-item reveal">
+        <div class="tl-dot">🎓</div>
+        <div class="tl-content">
+          <div class="tl-year">2023 — 2026</div>
+          <div class="tl-inst">Delhi University</div>
+          <div class="tl-degree">B.A. (Hons.) Psychology</div>
+          <span class="tl-grade">Undergraduate · Ongoing</span>
+        </div>
+      </div>
+      <div class="tl-item reveal" style="transition-delay:0.15s">
+        <div class="tl-dot">📘</div>
+        <div class="tl-content">
+          <div class="tl-year">Class XII</div>
+          <div class="tl-inst">Senior Secondary</div>
+          <div class="tl-degree">PCB + Psychology</div>
+          <span class="tl-grade">85%</span>
+        </div>
+      </div>
+      <div class="tl-item reveal" style="transition-delay:0.3s">
+        <div class="tl-dot">📗</div>
+        <div class="tl-content">
+          <div class="tl-year">Class X</div>
+          <div class="tl-inst">Secondary School</div>
+          <div class="tl-degree">All Subjects</div>
+          <span class="tl-grade">89%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-label reveal">What I Bring</div>
+  <h2 class="section-title reveal">Skills &amp; <em>Expertise</em></h2>
+  <div class="skills-grid">
+    <div class="skill-card reveal" data-delay="0">
+      <div class="skill-name">Research &amp; Data Analysis <span class="skill-pct">88%</span></div>
+      <div class="skill-bar"><div class="skill-fill" data-w="88"></div></div>
+    </div>
+    <div class="skill-card reveal" data-delay="0.1">
+      <div class="skill-name">Microsoft Excel <span class="skill-pct">80%</span></div>
+      <div class="skill-bar"><div class="skill-fill" data-w="80"></div></div>
+    </div>
+    <div class="skill-card reveal" data-delay="0.2">
+      <div class="skill-name">Communication &amp; Teamwork <span class="skill-pct">92%</span></div>
+      <div class="skill-bar"><div class="skill-fill" data-w="92"></div></div>
+    </div>
+    <div class="skill-card reveal" data-delay="0.3">
+      <div class="skill-name">Creative Design &amp; Event Planning <span class="skill-pct">85%</span></div>
+      <div class="skill-bar"><div class="skill-fill" data-w="85"></div></div>
+    </div>
+    <div class="skill-card reveal" data-delay="0.4">
+      <div class="skill-name">Behavioural Assessment <span class="skill-pct">78%</span></div>
+      <div class="skill-bar"><div class="skill-fill" data-w="78"></div></div>
+    </div>
+    <div class="skill-card reveal" data-delay="0.5">
+      <div class="skill-name">Case Study Analysis <span class="skill-pct">82%</span></div>
+      <div class="skill-bar"><div class="skill-fill" data-w="82"></div></div>
+    </div>
+  </div>
+  <div class="lang-chips">
+    <div class="lang-chips" style="margin-top:2rem;">
+      <span style="font-size:0.8rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-light);align-self:center;margin-right:0.5rem;">Languages:</span>
+      <span class="lang-chip">🇮🇳 Hindi</span>
+      <span class="lang-chip">🇬🇧 English</span>
+      <span class="lang-chip">🌙 Urdu</span>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label reveal">Where I've Worked</div>
+  <h2 class="section-title reveal">Experience &amp; <em>Involvement</em></h2>
+  <div class="exp-grid">
+    <div class="exp-card reveal">
+      <div class="exp-year">2025 · Internship</div>
+      <div class="exp-title">HAQ Centre for Child Rights</div>
+      <div class="exp-org">NGO · Child Rights Advocacy</div>
+      <div class="exp-desc">Contributed to child welfare initiatives, research documentation, and awareness campaigns in support of child rights across India.</div>
+      <span class="exp-tag">Social Impact</span>
+    </div>
+    <div class="exp-card reveal" style="transition-delay:0.15s">
+      <div class="exp-year">2025 · Internship</div>
+      <div class="exp-title">Muskurahat Foundation</div>
+      <div class="exp-org">NGO · Community Development</div>
+      <div class="exp-desc">Engaged with underprivileged communities, supporting educational outreach and mental health awareness programmes at the grassroots level.</div>
+      <span class="exp-tag">Community Work</span>
+    </div>
+    <div class="exp-card reveal" style="transition-delay:0.3s">
+      <div class="exp-year">Ongoing · College</div>
+      <div class="exp-title">Decoration Committee</div>
+      <div class="exp-org">Delhi University · College Events</div>
+      <div class="exp-desc">Lead creative installations and visual themes for college festivals, bringing artistic vision and coordinating with cross-functional teams.</div>
+      <span class="exp-tag">Leadership</span>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-label reveal">Research &amp; Work</div>
+  <h2 class="section-title reveal">Featured <em>Projects</em></h2>
+  <div class="projects-grid">
+    <div class="proj-card reveal" onclick="openModal(0)">
+      <div class="proj-img proj-img-1"><div class="proj-icon-big">📊</div></div>
+      <div class="proj-body">
+        <div class="proj-num">01</div>
+        <div class="proj-name">Behavioural Study Analysis</div>
+        <div class="proj-desc">Quantitative analysis of behavioural patterns using survey data, visualised through statistical charts and regression models.</div>
+      </div>
+      <div class="proj-arrow">↗</div>
+    </div>
+    <div class="proj-card reveal" style="transition-delay:0.15s" onclick="openModal(1)">
+      <div class="proj-img proj-img-2"><div class="proj-icon-big">🧠</div></div>
+      <div class="proj-body">
+        <div class="proj-num">02</div>
+        <div class="proj-name">Cognitive Psychology Case Study</div>
+        <div class="proj-desc">In-depth case study exploring memory, attention, and perception using established cognitive frameworks.</div>
+      </div>
+      <div class="proj-arrow">↗</div>
+    </div>
+    <div class="proj-card reveal" style="transition-delay:0.3s" onclick="openModal(2)">
+      <div class="proj-img proj-img-3"><div class="proj-icon-big">💚</div></div>
+      <div class="proj-body">
+        <div class="proj-num">03</div>
+        <div class="proj-name">Mental Health Awareness Campaign</div>
+        <div class="proj-desc">Visual storytelling campaign designed to reduce stigma around mental health through infographics, posters, and social media content.</div>
+      </div>
+      <div class="proj-arrow">↗</div>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements">
+  <div class="section-label reveal">Recognition</div>
+  <h2 class="section-title reveal">Achievements &amp; <em>Honours</em></h2>
+  <div class="ach-grid">
+    <div class="ach-card reveal"><div class="ach-icon">🎨</div><div class="ach-title">Poster-Making Awards</div><div class="ach-desc">Multiple inter-college & intra-college poster competition wins</div></div>
+    <div class="ach-card reveal" style="transition-delay:0.1s"><div class="ach-icon">📰</div><div class="ach-title">Editorial Board</div><div class="ach-desc">Member of school magazine editorial board</div></div>
+    <div class="ach-card reveal" style="transition-delay:0.2s"><div class="ach-icon">🏅</div><div class="ach-title">Inter-College Certs</div><div class="ach-desc">Participation and merit certificates across college events</div></div>
+    <div class="ach-card reveal" style="transition-delay:0.3s"><div class="ach-icon">🧩</div><div class="ach-title">Quiz Recognitions</div><div class="ach-desc">Recognised in academic and general knowledge competitions</div></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="contact-info">
+      <div class="section-label reveal">Let's Connect</div>
+      <h2 class="section-title reveal">Say <em>Hello</em></h2>
+      <p class="about-text reveal">Open to research collaborations, internship opportunities, and meaningful conversations about psychology and human behaviour.</p>
+      <div class="contact-links">
+        <a href="mailto:abiaansari6289@gmail.com" class="c-link reveal">
+          <span class="c-link-icon">✉️</span>
+          <div><div class="c-link-label">Email</div><div class="c-link-val">abiaansari6289@gmail.com</div></div>
+        </a>
+        <a href="tel:+919310656200" class="c-link reveal" style="transition-delay:0.1s">
+          <span class="c-link-icon">📱</span>
+          <div><div class="c-link-label">Phone</div><div class="c-link-val">+91 9310656200</div></div>
+        </a>
+        <div class="c-link reveal" style="transition-delay:0.2s">
+          <span class="c-link-icon">📍</span>
+          <div><div class="c-link-label">Location</div><div class="c-link-val">New Delhi, India</div></div>
+        </div>
+      </div>
+      <div class="social-row" style="margin-top:2rem">
+        <a href="#" class="soc-btn" title="LinkedIn">💼</a>
+        <a href="#" class="soc-btn" title="Instagram">📸</a>
+        <a href="#" class="soc-btn" title="Twitter">🐦</a>
+        <a href="mailto:abiaansari6289@gmail.com" class="soc-btn" title="Email">✉️</a>
+      </div>
+    </div>
+    <div class="contact-form reveal">
+      <div class="form-group">
+        <label class="form-label">Your Name</label>
+        <input type="text" class="form-input" placeholder="Full name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" class="form-input" placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Subject</label>
+        <input type="text" class="form-input" placeholder="Research collaboration, etc.">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Message</label>
+        <textarea class="form-input" placeholder="Tell me about your project or opportunity…"></textarea>
+      </div>
+      <button class="form-btn">Send Message ✦</button>
+    </div>
+  </div>
+</section>
+
+<footer>Designed &amp; crafted with <span>♡</span> for Abia Ansari · 2025</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-tag" id="modal-tag"></div>
+    <h2 class="modal-title" id="modal-title"></h2>
+    <p class="modal-text" id="modal-text"></p>
+    <div class="modal-chips" id="modal-chips"></div>
+  </div>
+</div>
+
+<script>
+// ── LOADER
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    document.getElementById('loader').classList.add('hidden');
+  },2400);
+});
+
+// ── CURSOR
+const cur=document.getElementById('cursor');
+const ring=document.getElementById('cursor-ring');
+document.addEventListener('mousemove',e=>{
+  cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';
+  setTimeout(()=>{ring.style.left=e.clientX+'px';ring.style.top=e.clientY+'px';},60);
+});
+
+// ── THEME
+const toggle=document.getElementById('theme-toggle');
+toggle.addEventListener('click',()=>{
+  document.documentElement.dataset.theme=
+    document.documentElement.dataset.theme==='dark'?'':'dark';
+});
+
+// ── CANVAS PARTICLES
+const canvas=document.getElementById('bg-canvas');
+const ctx=canvas.getContext('2d');
+let W,H,nodes=[];
+
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resize();window.addEventListener('resize',()=>{resize();init();});
+
+function init(){
+  nodes=[];
+  const n=Math.floor(W*H/14000);
+  for(let i=0;i<n;i++){
+    nodes.push({
+      x:Math.random()*W,y:Math.random()*H,
+      vx:(Math.random()-0.5)*0.3,vy:(Math.random()-0.5)*0.3,
+      r:Math.random()*2+1,
+    });
+  }
+}
+init();
+
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  const isDark=document.documentElement.dataset.theme==='dark';
+  const col=isDark?'197,184,232':'155,135,201';
+  
+  nodes.forEach(n=>{
+    n.x+=n.vx;n.y+=n.vy;
+    if(n.x<0||n.x>W)n.vx*=-1;
+    if(n.y<0||n.y>H)n.vy*=-1;
+    ctx.beginPath();
+    ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(${col},0.5)`;
+    ctx.fill();
+  });
+  
+  for(let i=0;i<nodes.length;i++){
+    for(let j=i+1;j<nodes.length;j++){
+      const dx=nodes[i].x-nodes[j].x;
+      const dy=nodes[i].y-nodes[j].y;
+      const d=Math.sqrt(dx*dx+dy*dy);
+      if(d<130){
+        ctx.beginPath();
+        ctx.moveTo(nodes[i].x,nodes[i].y);
+        ctx.lineTo(nodes[j].x,nodes[j].y);
+        ctx.strokeStyle=`rgba(${col},${0.15*(1-d/130)})`;
+        ctx.lineWidth=0.7;
+        ctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(draw);
+}
+draw();
+
+// ── INTERSECTION OBSERVER
+const obs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      // skill bars
+      e.target.querySelectorAll('.skill-fill').forEach(bar=>{
+        bar.style.width=bar.dataset.w+'%';
+      });
+    }
+  });
+},{threshold:0.15});
+
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// ── PARALLAX HERO
+document.addEventListener('scroll',()=>{
+  const y=window.scrollY;
+  document.querySelector('.hero-content').style.transform=`translateY(${y*0.08}px)`;
+  document.querySelector('.hero-visual').style.transform=`translateY(${y*0.04}px)`;
+});
+
+// ── PROJECT MODALS
+const projects=[
+  {
+    tag:'Research Project · 01',
+    title:'Behavioural Study Analysis',
+    text:'A structured research study examining behavioural tendencies across a sample population. Employed quantitative methods including surveys and statistical analysis (descriptive & inferential) to identify patterns in decision-making, social influence, and habit formation. Results were visualised using bar charts, scatter plots, and regression curves, forming the basis of a comprehensive report.',
+    chips:['Survey Design','Statistical Analysis','Excel','Report Writing','Data Visualisation'],
+  },
+  {
+    tag:'Cognitive Psychology · 02',
+    title:'Cognitive Psychology Case Study',
+    text:'An in-depth clinical-style case study examining a participant\'s cognitive profile across domains of memory (working and long-term), selective attention, visual perception, and executive functioning. Applied established frameworks including Baddeley\'s Working Memory Model and Levels of Processing Theory. Presented findings with clinical observations and evidence-based recommendations.',
+    chips:['Cognitive Assessment','Case Formulation','Memory Models','Attention Research','Academic Writing'],
+  },
+  {
+    tag:'Social Campaign · 03',
+    title:'Mental Health Awareness Campaign',
+    text:'A creative visual storytelling campaign developed to reduce stigma surrounding mental illness among young adults. Included a series of illustrated posters, infographic content, and social media assets centred on themes of anxiety, self-compassion, and help-seeking behaviour. Combined evidence-based messaging with accessible, empathetic visual design.',
+    chips:['Campaign Design','Mental Health Literacy','Visual Storytelling','Infographics','Social Media'],
+  },
+];
+
+function openModal(i){
+  const m=projects[i];
+  document.getElementById('modal-tag').textContent=m.tag;
+  document.getElementById('modal-title').textContent=m.title;
+  document.getElementById('modal-text').textContent=m.text;
+  const cc=document.getElementById('modal-chips');
+  cc.innerHTML=m.chips.map(c=>`<span class="modal-chip">${c}</span>`).join('');
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(e){
+  if(!e||e.target===document.getElementById('modal')){
+    document.getElementById('modal').classList.remove('open');
+    document.body.style.overflow='';
+  }
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+// ── Observe skill fills on scroll
+const skillObs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.skill-fill').forEach(bar=>{
+        bar.style.width=bar.dataset.w+'%';
+      });
+    }
+  });
+},{threshold:0.3});
+document.querySelectorAll('.skill-card').forEach(c=>skillObs.observe(c));
+</script>
+</body>
+</html>
