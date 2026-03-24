@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,700;0,900;1,400&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
+    
 /* RESET & ROOT */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
@@ -32,6 +33,11 @@ body { background:var(--black); color:var(--white); font-family:'Barlow',sans-se
 #cur2 { position:fixed; width:34px; height:34px; border:1px solid rgba(255,255,255,.35); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); mix-blend-mode:difference; }
 body:has(a:hover) #cur { width:18px; height:18px; }
 
+@media (pointer: coarse) {
+  #cur, #cur2 { display: none !important; }
+  body { cursor: auto !important; }
+}
+
 /* NAV */
 nav { position:fixed; top:0; left:0; right:0; z-index:200; display:flex; align-items:center; justify-content:space-between; padding:14px 48px; background:rgba(8,8,8,.92); backdrop-filter:blur(16px); border-bottom:1px solid rgba(255,255,255,.06); }
 .logo { display:flex; align-items:center; gap:12px; font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:15px; letter-spacing:.12em; text-transform:uppercase; text-decoration:none; color:var(--white); }
@@ -48,6 +54,17 @@ nav { position:fixed; top:0; left:0; right:0; z-index:200; display:flex; align-i
 .nav-links a:hover { color:var(--white); }
 .nav-cta { font-family:'Barlow Condensed',sans-serif; font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--white); text-decoration:none; display:flex; align-items:center; gap:10px; transition:gap .2s; }
 .nav-cta:hover { gap:18px; }
+
+/* MOBILE HAMBURGER */
+.menu-toggle { display:none; flex-direction:column; gap:6px; cursor:pointer; z-index:1001; }
+.menu-toggle span { width:24px; height:2px; background:var(--white); border-radius:2px; transition:.3s; }
+.menu-toggle.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.menu-toggle.active span:nth-child(2) { opacity:0; }
+.menu-toggle.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+.mobile-nav { position:fixed; inset:0; background:var(--black); z-index:1000; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:24px; transform:translateY(-100%); transition:transform .4s cubic-bezier(0.77, 0, 0.175, 1); }
+.mobile-nav.active { transform:translateY(0); }
+.mobile-nav a { font-family:'Barlow Condensed',sans-serif; font-size:32px; font-weight:900; color:var(--white); text-decoration:none; text-transform:uppercase; letter-spacing:.1em; }
 
 /* HERO */
 .hero { position:relative; height:100vh; min-height:580px; display:flex; align-items:center; overflow:hidden; }
@@ -253,29 +270,39 @@ footer { background:var(--black); border-top:1px solid rgba(255,255,255,.06); pa
 
 /* RESPONSIVE */
 @media (max-width:860px) {
-  nav { padding:12px 16px; }
-  .nav-links { display:none; }
-  .nav-logos { gap:8px; }
-  .nav-logo-img { width:30px; height:30px; }
-  .hero-text { padding:0 20px; }
-  .hero-tagline { right:20px; }
-  .hero-institutions { left:20px; bottom:90px; }
-  .hero-badge { right:20px; }
-  .about { grid-template-columns:1fr; padding:80px 20px; }
+  nav { padding:12px 24px; }
+  .nav-links, .nav-cta { display:none; }
+  .menu-toggle { display:flex; }
+  .hero-text { padding:0 24px; }
+  .hero-tagline { right:24px; bottom:140px; text-align:left; max-width:200px; font-size:9px; }
+  .hero-institutions { left:24px; bottom:40px; }
+  .hero-badge { display:none; }
+  .about { grid-template-columns:1fr; padding:80px 24px; gap:40px; }
+  .about-sub { margin-top:20px; max-width:100%; }
   .stats { grid-template-columns:1fr; }
-  .education,.skills-section,.experience,.langs { padding-left:20px; padding-right:20px; }
+  .education, .skills-section, .experience, .langs, .psy-section, .contact-section, .glow-section { padding-left:24px; padding-right:24px; }
   .skills-inner { grid-template-columns:1fr; gap:40px; }
   .edu-row { grid-template-columns:50px 1fr; }
-  .edu-badge { grid-column:1/-1; }
+  .edu-badge { grid-column:1/-1; width:fit-content; }
   .exp-row { grid-template-columns:1fr; gap:12px; }
-  .impact-section { grid-template-columns:1fr; padding:80px 20px; }
+  .impact-section { grid-template-columns:1fr; padding:80px 24px; }
   .impact-visual { grid-template-columns:1fr 1fr; }
   .langs-grid { grid-template-columns:1fr; }
-  .contact-section { padding:80px 20px 60px; }
-  footer { flex-direction:column; gap:18px; text-align:center; }
-  .glow-section { padding:80px 20px; }
+  footer { flex-direction:column; gap:18px; text-align:center; padding:40px 24px; }
   .psy-grid { grid-template-columns:1fr; }
-  .psy-section { padding:80px 20px; }
+  .hero-first, .hero-last { font-size:clamp(60px, 15vw, 120px); line-height: 0.9; }
+}
+
+@media (max-width:480px) {
+  nav { padding:12px 16px; }
+  .hero-text { padding:0 16px; }
+  .hero-first, .hero-last { font-size: 64px; }
+  .hero-photo { max-width: 90%; opacity: 0.4; }
+  .hero-tagline { position: relative; right: auto; bottom: auto; padding-top: 20px; text-align: center; max-width: 100%; margin: 0 auto; }
+  .hero-institutions { position: relative; left: auto; bottom: auto; padding-top: 20px; align-items: center; justify-content: center; }
+  .hero { height: auto; min-height: 100vh; padding-top: 100px; padding-bottom: 40px; display: flex; flex-direction: column; justify-content: center; }
+  .inst-badge { padding: 4px 10px; }
+  .impact-visual { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -302,7 +329,20 @@ footer { background:var(--black); border-top:1px solid rgba(255,255,255,.06); pa
     <li><a href="#contact">Contact</a></li>
   </ul>
   <a href="mailto:abiaansari2605@gmail.com" class="nav-cta">Get In Touch &nbsp;→</a>
+  <div class="menu-toggle" id="mobile-toggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
 </nav>
+
+<div class="mobile-nav" id="mobile-menu">
+  <a href="#home">Home</a>
+  <a href="#about">About</a>
+  <a href="#education">Education</a>
+  <a href="#experience">Experience</a>
+  <a href="#contact">Contact</a>
+</div>
 
 <!-- HERO -->
 <section class="hero" id="home">
@@ -749,6 +789,25 @@ function glowCheck(){
 }
 window.addEventListener('scroll', glowCheck, {passive:true});
 glowCheck();
+// MOBILE MENU
+const toggle = document.getElementById('mobile-toggle');
+const menu = document.getElementById('mobile-menu');
+const mobileLinks = document.querySelectorAll('.mobile-nav a');
+
+toggle.addEventListener('click', () => {
+  toggle.classList.toggle('active');
+  menu.classList.toggle('active');
+  document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : 'auto';
+});
+
+mobileLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    toggle.classList.remove('active');
+    menu.classList.remove('active');
+    document.body.style.overflow = 'auto';
+  });
+});
+
 </script>
 </body>
 </html>
